@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <div th:include="~{layouts/fragments/stylesBootstrap :: bootStrap }"></div>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.4.0.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+</head>
+<body>
+<div class="container">
+<form action="#" th:action="@{/saveFilm}" th:object="${film}" method="POST">
+    <input type="text" th:field="*{name}" placeholder="Film name" class="form-control mb-4 col-4"/>
+    <input type="number" th:field="*{year}" placeholder="Film year" class="form-control mb-4 col-4"/>
+    <input type="number" th:field="*{length}" placeholder="Film length" class="form-control mb-4 col-4"/>
+    <input type="text" th:field="*{description}" placeholder="Film description" class="form-control mb-4 col-4"/>
+    <input type="text" th:field="*{pictureUrl}" placeholder="Film picture path" class="form-control mb-4 col-4"/>
+    <select class="js-example-basic-multiple" name="countryName[]" multiple="multiple" th:size="${countryList.size()}">
+        <option name="countryName" th:each="countrie : ${countryList}" th:text="${countrie.name}"></option>
+    </select>
+    <select class="js-example-basic-multiple" name="genreName[]" multiple="multiple" th:size="${genreList.size()}">
+        <option name="countryName" th:each="genre : ${genreList}" th:text="${genre.name}"></option>
+    </select>
+    <select class="js-example-basic-multiple" name="producerName[]" multiple="multiple" th:size="${producerList.size()}">
+        <option name="producerName" th:each="producer : ${producerList}" th:text="${producer.name}"></option>
+    </select>
+
+    <button type="submit" class="btn btn-info col-2">Add Film</button>
+</form>
+    <img src="images/нападай.png">
+</div>
+<script>
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2({
+            tags: true
+        });
+    });
+</script>
+
+</body>
+
+</html>
