@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -67,19 +68,32 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public List<Film> findAllByOrderByNameAsc() {
+    public List<Film> sortByNameAsc() {
         return filmRepository.findAllByOrderByNameAsc();
     }
 
     @Override
-    public List<Film> findAllByOrderByNameDesc() {
+    public List<Film> sortByNameDesc() {
         return filmRepository.findAllByOrderByNameDesc();
+    }
 
-
+//    @Override
+//    public List<Film> findAllByOrderByLengthAsc() {
+//        return filmRepository.findAllByOrOrderByLengthAsc();
+//    }
+//
+//    @Override
+//    public List<Film> findAllByOrderByLengthDesc() {
+//        return filmRepository.findAllByOrOrderByLengthDesc();
+//    }
+//
+    @Override
+    public List<Film> searchFilm(String searchString) {
+        return filmRepository.findByNameContains(searchString);
     }
 
     @Override
-    public List<Film> searchFilm(String searchString) {
-        return filmRepository.findAllByName(searchString);
+    public Film showFilmById(Long id) {
+        return filmRepository.findById(id).get();
     }
 }

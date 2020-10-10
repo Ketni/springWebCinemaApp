@@ -1,10 +1,8 @@
 package com.example.demo.model;
 
-import ch.qos.logback.classic.db.names.ColumnName;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name="user", uniqueConstraints = @UniqueConstraint(columnNames ="username"))
@@ -23,6 +21,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(
                     name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
+    @ManyToMany(mappedBy = "users")
+    private Set<Film> films;
 
     public User(String username, String passwrod, Collection<Role> roles) {
         this.username = username;
@@ -30,6 +30,16 @@ public class User {
         this.roles = roles;
     }
     public User(){}
+
+    public Set<Film> getFilms() {
+        return films;
+    }
+
+    public void setFilms(Set<Film> films) {
+        this.films = films;
+    }
+
+
 
     public Long getId() {
         return id;

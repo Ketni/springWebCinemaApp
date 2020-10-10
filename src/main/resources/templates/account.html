@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>BosFilm account</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <div th:include="~{layouts/fragments/stylesBootstrap :: bootStrap}"></div>
+</head>
+<body>
+<div th:include="~{layouts/fragments/nav :: navBar}"></div>
+<div class="container">
+    <h1>My films</h1>
+    <h1 th:text="${#authentication.name}"></h1>
+    <div th:each="film : ${user.getFilms()}">
+        <p th:text="*{film.name}"></p>
+        <p th:text="*{film.year}"></p>
+        <br>
+        <br>
+    </div>
+
+</div>
+<div th:include="~{layouts/fragments/footer :: copy}"></div>
+</body>
+</html>

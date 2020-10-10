@@ -10,5 +10,7 @@ import java.util.List;
 public interface FilmRepository extends JpaRepository<Film,Long> {
     List<Film> findAllByOrderByNameAsc();
     List<Film> findAllByOrderByNameDesc();
-    List<Film> findAllByName(String searchString);
+//    List<Film> findAllByOrOrderByLengthAsc();
+//    List<Film> findAllByOrOrderByLengthDesc();
+    List<Film> findByNameContains(String searchString);
 }

@@ -9,38 +9,53 @@
 </head>
 <body>
 <div th:include="~{layouts/fragments/nav :: navBar}"></div>
-<div class="container" sec:authorize="isAuthenticated()">
-    <h1>AYE VORAM ZHIZN MYSORAM</h1>
-    <h2>Welcome <span sec:authentication="principal.username">User</span></h2>
-</div>
-<div class="container" sec:authorize="isAnonymous()">
-    <h1>Tu kto?</h1>
-</div>
 <div class="container" sec:authorize="hasAnyRole('ADMIN')">
     <h1>Создать фильм</h1>
     <a class="btn" th:href="@{/addFilmForm}">Нажми сюда</a>
 </div>
 <div class="container">
+    <div>
+        <div style="width: content-box">
+            <a th:href="@{/sort/{order}(order=${order})}">
+                <button type="button"  class="btn btn-outline-primary">Сортировка по длине</button>
+            </a>
+            <a style="text-align: center">
+                <button type="button"  class="btn btn-outline-primary">Сортировка по длине</button>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="container">
     <div class="row">
         <div class="col-md-4" th:each="film : ${filmList}">
             <div class="card mb-4 box-shadow">
-                <img class="card-img-top" style="width: 480px; height: 640px;"
-                     th:src="@{images/{image}(image=${film.pictureUrl})}">
+                <img class="card-img-top" style="width: content-box; height: 432px;"
+                     th:src="@{../images/{image}(image=${film.pictureUrl})}">
                 <div class="card-body">
-                    <p class="card-text" th:text="${film.description}"></p>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                            <a style="text-align: center" th:href="@{/filmDetails/{id} (id = ${film.id})}">
+                                <button type="button" th:text="${film.name}" class="btn btn-sm btn-outline-secondary"></button>
+                            </a>
+<!--                            <form th:action="@{/addFilmToUser/{userName} (userName = ${#authentication.name})}" th:object="${film}" method="POST">-->
+<!--                                <input type="hidden" name="film" th:object="${film}">-->
+<!--                                <button type="submit" class="btn btn-sm btn-outline-secondary">Add film</button>-->
+                            <a th:href="@{/addFilmToUser}">
+                            <button type="submit" class="btn btn-sm btn-outline-secondary">Add film</button>
+                            </a>
+                            </form>
+
                         </div>
-                        <small class="text-muted">9 mins</small>
+                        <small id="hours" class="text-muted" th:text="${film.length}+':мин./'"></small>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div th:replace="~{layouts/fragments/footer :: copy}">&copy; 2020 BosFilm</div>
+
+<div th:replace="~{layouts/fragments/footer :: copy}"></div>
+<div th:replace="~{layouts/fragments/anchor :: anchor}"></div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
@@ -50,6 +65,20 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
         crossorigin="anonymous"></script>
+<script>
+    var textStrings = document.getElementsByClassName('text-muted');
+    for(var i=0; i<textStrings.length; i++){
+        var text = textStrings[i].textContent;
+        var minutes = parseInt(text.match(/\d+/));
+        var remainderMinutes = minutes%60;
+        if (remainderMinutes>10)
+            var remainder = remainderMinutes;
+        else
+            var remainder = "0"+remainderMinutes;
+        var hourString = "0"+(minutes/60 >> 0)+":"+remainder;
+        textStrings[i].append(hourString);
+    }
+</script>
 </body>
 </html>
 

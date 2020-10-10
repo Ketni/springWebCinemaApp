@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <div th:include="~{layouts/fragments/stylesBootstrap :: bootStrap}"></div>
+</head>
+<body>
+<div th:include="~{layouts/fragments/nav :: navBar}"></div>
+<div th:object="${film}">
+    <div th:text="*{name}"></div>
+    <div th:text="*{description}"></div>
+    <div th:text="*{year}"></div>
+    <div th:text="*{length}"></div>
+    <div th:each="country : ${film.getCountries()}">
+        <div th:text="${country.name}"></div>
+    </div>
+    <img class="card-img-top" style="width: content-box; height: 432px;"
+         th:src="@{../images/{image}(image=${film.pictureUrl})}">
+</div>
+
+</body>
+</html>

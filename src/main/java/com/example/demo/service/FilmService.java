@@ -8,7 +8,10 @@ public interface FilmService {
     List<Film> getAllFilms();
     void saveFilm(Film film, String[] countryName, String[] genreName, String[] producerName);
     void deleteFilmById(long id);
-    List<Film> findAllByOrderByNameAsc();
-    List<Film> findAllByOrderByNameDesc();
+    List<Film> sortByNameAsc();
+    List<Film> sortByNameDesc();
+//    List<Film> findAllByOrderByLengthAsc();
+//    List<Film> findAllByOrderByLengthDesc();
     List<Film> searchFilm(String searchString);
+    Film showFilmById(Long id);
 }

@@ -38,6 +38,23 @@ public class Film {
             joinColumns = @JoinColumn(name = "film_id"),
             inverseJoinColumns = @JoinColumn(name = "producer_id"))
     Set<Producer> producers;
+    @ManyToMany()
+    @JoinTable(
+            name = "film_user",
+            joinColumns = @JoinColumn(name= "film_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    Set<User> users;
+
+    public Set<User> getUsers(){
+        if (users == null) {
+            return new HashSet<>();
+        }
+        return users;
+    }
+
+    public void setUsers(Set<User> users){
+        this.users = users;
+    }
 
     public Set<Producer> getProducers(){
         if (producers == null) {
