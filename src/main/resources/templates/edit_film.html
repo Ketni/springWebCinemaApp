@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin edit film</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <div th:include="~{layouts/fragments/stylesBootstrap :: bootStrap}"></div>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.4.0.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+</head>
+<body>
+<div th:include="~{layouts/fragments/admin_nav :: adminNav}"></div>
+<div class="container">
+<form th:action="@{~/admin/updateFilm}" th:object="${film}" method="POST">
+    <div class="containerForAll" style="display: flex">
+        <div class="containerForAllInput" style="width: 50%">
+            <h1>Edit for film</h1>
+            <input type="hidden" th:field="*{id}"/>
+            <label for="filmName">Название фильма</label>
+            <input type="text" id="filmName" th:field="*{name}"  class="form-control mb-4 col-4">
+            <label for="filmDescription">Описание фильма</label>
+            <input type="text" id="filmDescription" th:field="*{description}"  class="form-control mb-4 col-4">
+            <label for="filmYear">Год выхода фильма</label>
+            <input type="text" id="filmYear" th:field="*{year}"  class="form-control mb-4 col-4">
+            <label for="filmLength">Продолжительность фильма</label>
+            <input type="text" id="filmLength" th:field="*{length}"  class="form-control mb-4 col-4">
+            <label for="filmPicture">Путь к картинке фильма</label>
+            <input type="text" id="filmPicture" th:field="*{pictureUrl}"  class="form-control mb-4 col-4">
+        </div>
+        <br>
+        <div class="row containerForAllSelect" style="width: 50%; display: flex; flex-direction: column">
+            <div>
+                <button style="height: 50px; width: 200px; margin-left: 150px;" disabled="disabled" class="btn btn-outline-primary">Страны фильма
+                </button>
+                <select style="width: 500px;" class="js-example-basic-multiple" name="countryName[]" multiple="multiple" th:size="${countryList.size()}">
+                    <div th:each="country : ${countryList}">
+                        <div th:if="${film.getCountries().contains(country)}">
+                            <option name="countryName" selected="selected" th:text="${country.name}"></option>
+                        </div>
+                        <div th:if="${!film.getCountries().contains(country)}">
+                            <option name="countryName" th:text="${country.name}"></option>
+                        </div>
+                    </div>
+                </select>
+            </div>
+            <br>
+            <div>
+                <button style="height: 50px; width: 200px; margin-left: 150px;" disabled="disabled" class="btn btn-outline-primary">Жанры фильм
+                </button>
+                <select style="width: 500px;" class="js-example-basic-multiple" name="genreName[]" multiple="multiple" th:size="${genreList.size()}">
+                    <div th:each="genre : ${genreList}">
+                        <div th:if="${film.getGenres().contains(genre)}">
+                            <option name="genreName" selected="selected" th:text="${genre.name}"></option>
+                        </div>
+                        <div th:if="${!film.getGenres().contains(genre)}">
+                            <option name="genreName" th:text="${genre.name}"></option>
+                        </div>
+                    </div>
+                </select>
+            </div>
+            <br>
+            <div>
+                <button style="height: 50px; width: 200px; margin-left: 150px" disabled="disabled" class="btn btn-outline-primary">Режисёры фильма
+                </button>
+                <select style="width: 500px;" class="js-example-basic-multiple" name="producerName[]" multiple="multiple" th:size="${producerList.size()}">
+                    <div th:each="producer : ${producerList}">
+                        <div th:if="${film.getProducers().contains(producer)}">
+                            <option name="producerName" selected="selected" th:text="${producer.name}"></option>
+                        </div>
+                        <div th:if="${!film.getProducers().contains(producer)}">
+                            <option name="producerName" th:text="${producer.name}"></option>
+                        </div>
+                    </div>
+                </select>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-info col-2">Update film</button>
+</form>
+</div>
+<script>
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2({
+            tags: true
+        });
+    });
+</script>
+
+</body>
+</html>

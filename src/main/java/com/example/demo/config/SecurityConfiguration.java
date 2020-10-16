@@ -17,6 +17,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+                          //  ,securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -52,7 +53,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/js/**",
                 "/css/**",
                 "/images/**",
-                "/").permitAll()
+                "/",
+                "/searchAndSort",
+                "/searchAndSortByLength",
+                "/filmDetails/**").permitAll()
+                .antMatchers("/account/*").access("hasAnyAuthority('ROLE_USER')")
+                .antMatchers("/admin/*").access("hasAnyAuthority('ROLE_ADMIN')")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

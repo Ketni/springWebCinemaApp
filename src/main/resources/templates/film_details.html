@@ -1,23 +1,93 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Details</title>
     <div th:include="~{layouts/fragments/stylesBootstrap :: bootStrap}"></div>
 </head>
 <body>
-<div th:include="~{layouts/fragments/nav :: navBar}"></div>
+<div th:include="~{layouts/fragments/admin_nav :: adminNav}"></div>
+<div class="container">
 <div th:object="${film}">
-    <div th:text="*{name}"></div>
-    <div th:text="*{description}"></div>
-    <div th:text="*{year}"></div>
-    <div th:text="*{length}"></div>
-    <div th:each="country : ${film.getCountries()}">
-        <div th:text="${country.name}"></div>
-    </div>
-    <img class="card-img-top" style="width: content-box; height: 432px;"
-         th:src="@{../images/{image}(image=${film.pictureUrl})}">
+    <div style="display: flex;">
+        <div style="width: 70%">
+            <div th:text="'Название: '+*{name}"></div>
+            <br>
+            <div th:text="'Описание: '+*{description}"></div>
+            <br>
+            <div th:text="'Год выхода: '+*{year}"></div>
+            <br>
+            <div th:text="'Длительность: '+*{length}+' мин.'"></div>
+            <br>
+            <div>
+                <div>
+                    <nowrap>Страны: </nowrap><nowrap th:each="country : ${film.getCountries()}">
+                    <nowrap th:if="${film.getCountries().size()==1}" th:text="${country.name}+'.'"></nowrap>
+                    <nowrap class="dotCheck1" th:if="${film.getCountries().size()!=1}" th:text="${country.name}+', '"></nowrap>
+                </nowrap>
+                </div>
+                <div><br></div>
+                <div>
+                    <nowrap>Жанры: </nowrap><nowrap th:each="genre : ${film.getGenres()}">
+                    <nowrap th:if="${film.getGenres().size()==1}" th:text="${genre.name}+'.'"></nowrap>
+                    <nowrap class="dotCheck2" th:if="${film.getGenres().size()!=1}" th:text="${genre.name}+', '"></nowrap>
+                </nowrap>
+                </div>
+                <div><br></div>
+                <div>
+                    <nowrap>Режисёры :</nowrap><nowrap th:each="producer : ${film.getProducers()}">
+                    <nowrap th:if="${film.getProducers().size()==1}" th:text="${producer.name}+'.'"></nowrap>
+                    <nowrap class="dotCheck3" th:if="${film.getProducers().size()!=1}" th:text="${producer.name}+', '"></nowrap>
+                </nowrap>
+                </div>
+                <div><br></div>
+            </div>
+            <div sec:authorize="isAuthenticated()" th:each="user : ${userList}">
+                <div th:if="${#authentication.name == user.username}">
+                    <div th:if="${user.getFilms().contains(film)}">
+                        <button style="height: 51px" disabled="disabled" class="btn btn-sm btn-outline-secondary">Добавлено
+                        </button>
+                    </div>
+                    <div th:if="${!user.getFilms().contains(film)}">
+                        <form th:action="@{/addFilmFromDetails/{name}(name=${#authentication.name})}"
+                              method="POST">
+                            <input type="hidden" name="filmId" th:value="${film.id}">
+                            <button style="height: 51px" type="submit" class="btn btn-sm btn-outline-secondary">Добавить
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="width: 30%;">
+        <img class="card-img-top"
+             th:src="@{../images/{image}(image=${film.pictureUrl})}">
+        </div>
+        </div>
 </div>
+</div>
+<div th:include="~{layouts/fragments/footer :: copy}"></div>
+<script>
+    var sizeCountries = document.getElementsByClassName('dotCheck1');
+    var sizeGenres = document.getElementsByClassName('dotCheck2');
+    var sizeProducers = document.getElementsByClassName('dotCheck3');
+    if(sizeCountries.length>1) {
+        var stringLastCountrie = sizeCountries[sizeCountries.length - 1].textContent;
+        var inputStringCountry = stringLastCountrie.substring(0, stringLastCountrie.length - 2) + ".";
+        sizeCountries[sizeCountries.length - 1].textContent = inputStringCountry;
+    }
+    if (sizeGenres.length>1){
+        var stringLastGenre = sizeGenres[sizeGenres.length-1].textContent;
+        var inputStringGenre = stringLastGenre.substring(0,stringLastGenre.length-2)+".";
+        sizeGenres[sizeGenres.length-1].textContent = inputStringGenre;
+    }
+    if (sizeProducers.length>1) {
+        var stringLastProducer = sizeProducers[sizeProducers.length - 1].textContent;
+        var inputStringProducer = stringLastProducer.substring(0, stringLastProducer.length - 2) + ".";
+        sizeProducers[sizeProducers.length - 1].textContent = inputStringProducer;
+    }
 
+</script>
 </body>
 </html>

@@ -9,6 +9,14 @@ import java.util.Set;
 @Entity
 @Table(name = "producer")
 public class Producer {
+    public Set<Film> getFilms() {
+        return films;
+    }
+
+    public void setFilms(Set<Film> films) {
+        this.films = films;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

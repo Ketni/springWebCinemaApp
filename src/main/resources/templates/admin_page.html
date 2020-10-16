@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>BosFilm Admin</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <div th:include="~{layouts/fragments/stylesBootstrap :: bootStrap}"></div>
+    <style>
+        p {
+            margin: 0;
+        }
+        .card {
+            height: 450px;
+            width: 220px;
+        }
+    </style>
+</head>
+<body>
+<div th:include="~{layouts/fragments/admin_nav :: adminNav}"></div>
+<div class="container">
+    <h1 class="jumbotron-heading">CRUD operations</h1>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal" style="text-align: center">Films</h4>
+            </div>
+            <div class="card-body">
+                <img class="card-img-top"
+                     th:src="@{../images/leo.jpg}" style="height: 290px">
+                <a th:href="@{films}">
+                    <button type="button" style="width: 190px ;position: absolute; bottom: 5px" class="btn btn-lg btn-block btn-outline-primary">
+                        <p>Crud</p>
+                        <p>Films</p>
+                    </button>
+                </a>
+            </div>
+        </div>
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal" style="text-align: center">Users</h4>
+            </div>
+            <div class="card-body">
+                <img class="card-img-top"
+                     th:src="@{../images/raf.jpg}">
+                <a th:href="@{users}">
+                <button type="button" style="width: 190px ;position: absolute; bottom: 5px" class="btn btn-lg btn-block btn-outline-primary">
+                    <p>Crud</p>
+                    <p>Users</p>
+                </button>
+                </a>
+            </div>
+        </div>
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal" style="text-align: center">Genres</h4>
+            </div>
+            <div class="card-body">
+                <img class="card-img-top"
+                     th:src="@{../images/shr.jpg}">
+                <a th:href="@{genres}">
+                <button type="button" style="width: 190px ;position: absolute; bottom: 5px" class="btn btn-lg btn-block btn-outline-primary">
+                    <p>Crud</p>
+                    <p>Genres</p>
+                </button>
+                </a>
+            </div>
+        </div>
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal" style="text-align: center">Producers</h4>
+            </div>
+            <div class="card-body">
+                <img class="card-img-top"
+                     th:src="@{../images/mik.jpg}">
+                <a th:href="@{producers}">
+                <button type="button" style="width: 190px ;position: absolute; bottom: 5px" class="btn btn-lg btn-block btn-outline-primary">
+                    <p>Crud</p>
+                    <p>Producers</p>
+                </button>
+                </a>
+            </div>
+        </div>
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal" style="text-align: center">Countries</h4>
+            </div>
+            <div class="card-body">
+                <img class="card-img-top"
+                     th:src="@{../images/don.jpg}">
+                <a th:href="@{countries}">
+                <button type="button" style="width: 190px ;position: absolute; bottom: 5px" class="btn btn-lg btn-block btn-outline-primary">
+                    <p>Crud</p>
+                    <p>Countries</p>
+                </button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

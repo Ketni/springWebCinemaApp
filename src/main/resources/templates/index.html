@@ -9,44 +9,55 @@
 </head>
 <body>
 <div th:include="~{layouts/fragments/nav :: navBar}"></div>
-<div class="container" sec:authorize="hasAnyRole('ADMIN')">
-    <h1>Создать фильм</h1>
-    <a class="btn" th:href="@{/addFilmForm}">Нажми сюда</a>
-</div>
 <div class="container">
-    <div>
-        <div style="width: content-box">
-            <a th:href="@{/sort/{order}(order=${order})}">
-                <button type="button"  class="btn btn-outline-primary">Сортировка по длине</button>
-            </a>
-            <a style="text-align: center">
-                <button type="button"  class="btn btn-outline-primary">Сортировка по длине</button>
-            </a>
-        </div>
+    <div class="row" style="margin-left: 0px ;margin-bottom: 10px">
+            <form th:action="@{/searchAndSort}" method="GET">
+                <input th:if="${order}" type="hidden" name="order" th:value="${true}">
+                <input th:if="${!order}" type="hidden" name="order" th:value="${false}">
+                <input type="hidden" id="inputSearch" name="searchString" value="">
+                <button type="submit" id="onclick" onclick="myFunc();saveF()" class="btn btn-outline-primary">Сортировка по названию</button>
+            </form>
+            <form th:action="@{/searchAndSortByLength}" method="GET">
+                <input th:if="${order}" type="hidden" name="order" th:value="${true}">
+                <input th:if="${!order}" type="hidden" name="order" th:value="${false}">
+                <input type="hidden" id="inputSearch2" name="searchString" value="">
+                <button type="submit" id="onclick2" onclick="myFunc();saveF()" class="btn btn-outline-primary">Сортировка по длительности</button>
+            </form>
     </div>
 </div>
 <div class="container">
-    <div class="row">
+    <div class="row" style="right: -100px; width: 110%">
         <div class="col-md-4" th:each="film : ${filmList}">
             <div class="card mb-4 box-shadow">
-                <img class="card-img-top" style="width: content-box; height: 432px;"
+                <img class="card-img-top" style="width: content-box; height: 462px;"
                      th:src="@{../images/{image}(image=${film.pictureUrl})}">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
                             <a style="text-align: center" th:href="@{/filmDetails/{id} (id = ${film.id})}">
-                                <button type="button" th:text="${film.name}" class="btn btn-sm btn-outline-secondary"></button>
+                                <button style="height: 51px" type="button" th:text="${film.name}"
+                                        class="btn btn-sm btn-outline-secondary"></button>
                             </a>
-<!--                            <form th:action="@{/addFilmToUser/{userName} (userName = ${#authentication.name})}" th:object="${film}" method="POST">-->
-<!--                                <input type="hidden" name="film" th:object="${film}">-->
-<!--                                <button type="submit" class="btn btn-sm btn-outline-secondary">Add film</button>-->
-                            <a th:href="@{/addFilmToUser}">
-                            <button type="submit" class="btn btn-sm btn-outline-secondary">Add film</button>
-                            </a>
-                            </form>
 
+                            <div sec:authorize="isAuthenticated()" th:each="user : ${userList}">
+                                <div th:if="${#authentication.name == user.username}">
+                                    <div th:if="${user.getFilms().contains(film)}">
+                                        <button style="height: 51px" disabled="disabled" class="btn btn-sm btn-outline-secondary">Добавлено
+                                        </button>
+                                    </div>
+                                    <div th:if="${!user.getFilms().contains(film)}">
+                                        <form th:action="@{/addFilm/{name}(name=${#authentication.name})}"
+                                              method="POST">
+                                            <input type="hidden" name="filmId" th:value="${film.id}">
+                                            <button style="height: 51px" type="submit" class="btn btn-sm btn-outline-secondary">Добавить
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <small id="hours" class="text-muted" th:text="${film.length}+':мин./'"></small>
+                        <small style="float: right" id="hours" class="text-muted"
+                               th:text="${film.length}+':мин./'"></small>
                     </div>
                 </div>
             </div>
@@ -67,16 +78,52 @@
         crossorigin="anonymous"></script>
 <script>
     var textStrings = document.getElementsByClassName('text-muted');
-    for(var i=0; i<textStrings.length; i++){
+    for (var i = 0; i < textStrings.length; i++) {
         var text = textStrings[i].textContent;
         var minutes = parseInt(text.match(/\d+/));
-        var remainderMinutes = minutes%60;
-        if (remainderMinutes>10)
+        var remainderMinutes = minutes % 60;
+        if (remainderMinutes > 10)
             var remainder = remainderMinutes;
         else
-            var remainder = "0"+remainderMinutes;
-        var hourString = "0"+(minutes/60 >> 0)+":"+remainder;
+            var remainder = "0" + remainderMinutes;
+        var hourString = "0" + (minutes / 60 >> 0) + ":" + remainder;
         textStrings[i].append(hourString);
+    }
+</script>
+<script>
+    saveF = function () {
+        var elements = document.querySelectorAll('input, textarea');
+        for (i = 0; i < elements.length; i++) {
+            (function (element) {
+                var id = element.getAttribute('id');
+                if (id == "searchStringNav")
+                localStorage.setItem(id, element.value);
+            })(elements[i]);
+        }
+    }
+    function load() {
+        var elements = document.querySelectorAll('input, textarea');
+        for (i = 0; i < elements.length; i++) {
+            (function (element) {
+                var id = element.getAttribute('id');
+                if (id == "searchStringNav")
+                element.value = localStorage.getItem(id);
+            })(elements[i]);
+        }
+    }
+        load();
+    localStorage.clear();
+</script>
+<script>
+    myFunc = function () {
+        if (document.getElementById("searchStringNav").value != ""){
+            var inputText = document.getElementById("searchStringNav").value;
+            document.getElementById("inputSearch").value=inputText;
+            document.getElementById("inputSearch2").value=inputText;
+        }
+    }
+    clearFunc = function() {
+        localStorage.clear();
     }
 </script>
 </body>

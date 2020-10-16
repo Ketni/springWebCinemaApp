@@ -8,4 +8,6 @@ public interface ProducerService {
     List<Producer> getAllProducers();
     void saveProducer(Producer producer);
     Producer getProducerByName(String name);
+    Producer getProducerById(Long id);
+    void deleteProducerById(Long id);
 }

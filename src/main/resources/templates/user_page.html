@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin users</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <div th:include="~{layouts/fragments/stylesBootstrap :: bootStrap}"></div>
+</head>
+<body>
+<div th:include="~{layouts/fragments/admin_nav :: adminNav}"></div>
+<div class="container">
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${userList}">
+        <th scope="row" class="numberCount"></th>
+        <td th:text="*{user.username}"></td>
+        <td>
+            <a th:href="@{editUser/{id}(id=${user.id})}">
+                <button type="button" class="btn btn-outline-warning">
+                    Edit
+                </button>
+            </a>
+        </td>
+        <td>
+            <a th:href="@{deleteUser/{id}(id=${user.id})}">
+                <button type="button" class="btn btn-outline-danger">
+                    Delete
+                </button>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+<script>
+    var counter = document.getElementsByClassName('numberCount');
+    for (var i=0; i<counter.length+1; i++){
+        var j=i+1
+        counter[i].append(j.toString());
+    }
+</script>
+</body>
+</html>

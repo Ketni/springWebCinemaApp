@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin edit genre</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <div th:include="~{layouts/fragments/stylesBootstrap :: bootStrap}"></div>
+</head>
+<body>
+<div th:include="~{layouts/fragments/admin_nav :: adminNav}"></div>
+
+
+<form th:action="@{~/admin/updateGenre}" th:object="${genre}" method="POST">
+    <div class="container">
+        <h1>Edit for genre</h1>
+    <input type="hidden" th:field="*{id}"/>
+    <input type="text" th:field="*{name}"  class="form-control mb-4 col-4">
+    <button type="submit" class="btn btn-info col-2">Update genre</button>
+    </div>
+</form>
+</body>
+</html>

@@ -1,7 +1,9 @@
 package com.example.demo.service;
 
+import com.example.demo.model.Film;
 import com.example.demo.model.Role;
 import com.example.demo.model.User;
+import com.example.demo.repository.FilmRepository;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.dto.UserRegistrationDto;
@@ -13,16 +15,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+    @Autowired
+    private FilmRepository filmRepository;
+
     private UserRepository userRepository;
+    @Autowired
+    private RoleService roleService;
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
@@ -41,14 +45,33 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User user) {
-        return userRepository.save(user);
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
+
 
     @Override
     public User findByName(String name) {
         return userRepository.findByUsername(name);
     }
+
+    @Override
+    public User findById(Long id) {
+        return userRepository.findById(id).get();
+    }
+
+    @Override
+    public void updateUser(User user, String [] roleName) {
+        Set<Role> roles = new HashSet<>();
+        for (String name: roleName
+             ) {
+            if (roleService.hasRole(name))
+                roles.addAll(roleRepository.findByName(name));
+        }
+        user.setRoles(roles);
+        userRepository.save(user);
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -62,5 +85,31 @@ public class UserServiceImpl implements UserService {
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+    }
+
+    @Override
+    public void addFilmToUser(Long filmId, String username) {
+        User user = userRepository.findByUsername(username);
+        Set<Film> films = new HashSet<>();
+        Film film = filmRepository.getOne(filmId);
+        films.add(film);
+        user.getFilms().addAll(films);
+        userRepository.save(user);;
+    }
+
+    @Override
+    public void deleteUserById(Long id) {
+        User user = userRepository.findById(id).get();
+        user.getRoles().clear();
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    public void removeFilmById(String username,Long filmId) {
+        User user = userRepository.findByUsername(username);
+        Set<Film> films = user.getFilms();
+        films.remove(filmRepository.getOne(filmId));
+        user.setFilms(films);
+        userRepository.save(user);
     }
 }

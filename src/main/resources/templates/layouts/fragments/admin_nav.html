@@ -8,9 +8,9 @@
     <div th:include="~{layouts/fragments/stylesBootstrap :: bootStrap}"></div>
 </head>
 <body>
-<div th:fragment="navBar">
+<div th:fragment="adminNav">
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" onclick="clearFunc()" th:href="@{/}">Home</a>
+    <a class="navbar-brand" th:href="@{/}">Home</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -19,7 +19,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active" sec:authorize="isAuthenticated()">
-                <a class="nav-link" th:href="@{/account/{name}(name=${#authentication.name})}" th:text="${#authentication.name}"><span class="sr-only">(current)</span></a>
+                <a class="nav-link" th:href="@{/account/{name}(name=${#authentication.name})}">Account<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item" sec:authorize="isAuthenticated()">
                 <a class="nav-link" th:href="@{/logout}">Logout</a>
@@ -31,13 +31,6 @@
                 <a class="nav-link" th:href="@{/admin/mainPage}">ADMIN</a>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0" th:action="@{/searchAndSort}" method="GET">
-
-            <input class="form-control mr-sm-2" type="search" name="searchString"
-                   id="searchStringNav" placeholder="Search" aria-label="Search">
-            <input type="hidden" name="order" id="ignore" th:value="${true}">
-            <button class="btn btn-outline-success my-2 my-sm-0" id="click" onclick="saveF()" type="submit">Search</button>
-        </form>
     </div>
 </nav>
 </div>

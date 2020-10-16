@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin edit user</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <div th:include="~{layouts/fragments/stylesBootstrap :: bootStrap}"></div>
+</head>
+<body>
+<div th:include="~{layouts/fragments/admin_nav :: adminNav}"></div>
+<form th:action="@{addGenre}" th:object="${genre}" method="POST">
+    <input type="text" th:field="*{name}"  placeholder="Введите название жанра" class="form-control mb-4 col-4">
+    <button type="submit" class="btn btn-outline-success">Добавить</button>
+</form>
+</body>
+</html>

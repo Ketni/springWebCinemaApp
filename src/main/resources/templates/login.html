@@ -8,7 +8,9 @@
           crossorigin="anonymous">
 </head>
 <body>
-<div class="container">
+<div th:include="~{layouts/fragments/login_register_nav :: loginRegisterNavBar}"></div>
+<div class="container" style="position: fixed; top: 50%; left:50%; width: 800px;
+                                        height: 600px; margin: -200px 0 0 -220px;">
     <div class="row">
         <div class="col-md-6 col-md-offset-offset-3">
             <h1>User Login Page</h1>
@@ -33,7 +35,7 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-offset-3">
-                            <input type="submit" name="Login-submit" id="Login-submit"
+                            <input style="margin-left: 15px;" type="submit" name="Login-submit" id="Login-submit"
                             class="form-control btn btn-primary" value="Log In" />
                         </div>
                     </div>

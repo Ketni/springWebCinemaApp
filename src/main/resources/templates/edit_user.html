@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin edit user</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <div th:include="~{layouts/fragments/stylesBootstrap :: bootStrap}"></div>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.4.0.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+</head>
+<body>
+<div th:include="~{layouts/fragments/admin_nav :: adminNav}"></div>
+
+<form th:action="@{~/admin/updateUser}" th:object="${user}" method="POST">
+    <div class="container">
+        <h1>Edit for user</h1>
+    <input type="hidden" th:field="*{id}"/>
+    <input type="text" th:field="*{username}"  class="form-control mb-4 col-4">
+    <input type="hidden" th:field="*{passwrod}">
+    <select class="js-example-basic-multiple" name="roleName[]" style="width: 180px" multiple="multiple" th:size="${roleList.size()}">
+        <div th:each="role : ${roleList}">
+        <div th:if="${user.getRoles().contains(role)}">
+        <option name="roleName" selected="selected" th:text="${role.name}"></option>
+        </div>
+        <div th:if="${!user.getRoles().contains(role)}">
+            <option name="roleName" th:text="${role.name}"></option>
+        </div>
+        </div>
+    </select>
+        <button type="submit" class="btn btn-info col-2">Update user</button>
+    </div>
+</form>
+<script>
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2({
+            tags: true
+        });
+    });
+</script>
+
+</body>
+</html>

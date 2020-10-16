@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -21,8 +22,23 @@ public class User {
             inverseJoinColumns = @JoinColumn(
                     name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "film_user",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "film_id", referencedColumnName = "id"))
     private Set<Film> films;
+
+    public Set<Film> getFilms() {
+        if (films == null)
+            return new HashSet<Film>();
+        return films;
+    }
+    public void setFilms(Set<Film> films) {
+        this.films = films;
+    }
 
     public User(String username, String passwrod, Collection<Role> roles) {
         this.username = username;
@@ -31,13 +47,6 @@ public class User {
     }
     public User(){}
 
-    public Set<Film> getFilms() {
-        return films;
-    }
-
-    public void setFilms(Set<Film> films) {
-        this.films = films;
-    }
 
 
 

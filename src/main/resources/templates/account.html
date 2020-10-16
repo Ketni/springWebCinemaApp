@@ -8,18 +8,86 @@
     <div th:include="~{layouts/fragments/stylesBootstrap :: bootStrap}"></div>
 </head>
 <body>
-<div th:include="~{layouts/fragments/nav :: navBar}"></div>
-<div class="container">
-    <h1>My films</h1>
-    <h1 th:text="${#authentication.name}"></h1>
-    <div th:each="film : ${user.getFilms()}">
-        <p th:text="*{film.name}"></p>
-        <p th:text="*{film.year}"></p>
-        <br>
-        <br>
+<div th:include="~{layouts/fragments/admin_nav :: adminNav}"></div>
+    <div class="container" th:if="${user.getFilms().isEmpty()}" style="position: fixed; top: 50%; left:50%;
+            margin: -100px 0 0 -500px;">
+        <h1>Коллекция фильмов пуста, добавьте что-нибудь из главной страницы и возвращайтесь!</h1>
+        <div style="margin-left: 250px; margin-top: 35px">
+            <a th:href="@{/}">
+                <button type="button" class="btn btn-outline-success">
+                    Вернуться на главную страницу</button>
+            </a>
+        </div>
     </div>
-
-</div>
+    <div class="container" th:if="${!user.getFilms().isEmpty()}">
+    <table class="table" style="text-align: center;">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">
+                <form th:action="@{sortByName}" method="GET">
+                    <input th:if="${order}" type="hidden" name="order" th:value="${true}">
+                    <input th:if="${!order}" type="hidden" name="order" th:value="${false}">
+                    <input type="hidden" name="username" th:value="${user.username}">
+                    <button type="submit" class="btn btn-outline-primary">Название</button>
+                </form>
+            </th>
+            <th scope="col">
+                <form th:action="@{sortByYear}" method="GET">
+                    <input th:if="${order}" type="hidden" name="order" th:value="${true}">
+                    <input th:if="${!order}" type="hidden" name="order" th:value="${false}">
+                    <input type="hidden" name="username" th:value="${user.username}">
+                    <button type="submit" class="btn btn-outline-primary">Год выпуска</button>
+                </form>
+            </th>
+            <th scope="col">
+                <form th:action="@{sortByLength}" method="GET">
+                    <input th:if="${order}" type="hidden" name="order" th:value="${true}">
+                    <input th:if="${!order}" type="hidden" name="order" th:value="${false}">
+                    <input type="hidden" name="username" th:value="${user.username}">
+                    <button type="submit" class="btn btn-outline-primary">Длительность</button>
+                </form>
+            </th>
+            <th scope="col" style="padding-bottom: 20px; color: blue;">Картинка</th>
+            <th scope="col" style="padding-bottom: 20px; color: red;">Убрать из списка</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="film : ${filmList}">
+            <th style="padding-top: 100px" scope="row" class="numberCount" ></th>
+            <td style="padding-top: 100px">
+                <a th:href="@{~/filmDetails/{id}(id=${film.id})}">
+                    <button class="btn btn-outline-primary" th:text="*{film.name}"></button>
+                </a>
+            </td>
+            <td style="padding-top: 100px">
+                <p th:text="${film.year}+' год'"></p>
+            </td>
+            <td style="padding-top: 100px">
+                <p th:text="${film.length}+ ' минут'"></p>
+            </td>
+            <td>
+                <img style="width: 200px; height: 200px;"
+                     th:src="@{../images/{image}(image=${film.pictureUrl})}">
+            </td>
+            <td style="padding-top: 100px">
+                <form th:action="@{clearFilm}" >
+                    <input type="hidden" th:name="username" th:value="${user.username}">
+                    <input type="hidden" th:name="filmId" th:value="${film.id}">
+                    <button type="submit" class="btn btn-outline-danger">Убрать</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
 <div th:include="~{layouts/fragments/footer :: copy}"></div>
+<script>
+    var counter = document.getElementsByClassName('numberCount');
+    for (var i=0; i<counter.length+1; i++){
+        var j=i+1
+        counter[i].append(j.toString());
+    }
+</script>
 </body>
 </html>

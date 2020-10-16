@@ -8,4 +8,6 @@ public interface CountryService {
     List<Country> getAllCountries();
     void saveCountry(Country country);
     Country getCountryByName(String name);
+    void deleteCountryById(Long id);
+    Country getCountryById(Long id);
 }

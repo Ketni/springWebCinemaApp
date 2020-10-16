@@ -8,4 +8,6 @@ public interface GenreService {
     List<Genre> getAllGenres();
     void saveGenre(Genre genre);
     Genre getGenreByName(String name);
+    void deleteGenreById(Long id);
+    Genre getGenreById(Long id);
 }

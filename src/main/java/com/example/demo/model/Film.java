@@ -20,39 +20,34 @@ public class Film {
     @Column(length = 2048)
     private String description;
     private String pictureUrl;
-    @ManyToMany()
+    @ManyToMany(cascade=CascadeType.ALL)
     @JoinTable(
             name = "film_country",
             joinColumns = @JoinColumn(name = "film_id"),
             inverseJoinColumns = @JoinColumn(name = "country_id"))
     Set<Country> countries;
-    @ManyToMany()
+    @ManyToMany(cascade=CascadeType.ALL)
     @JoinTable(
             name = "film_genre",
             joinColumns = @JoinColumn(name = "film_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
     Set<Genre> genres;
-    @ManyToMany()
+    @ManyToMany(cascade=CascadeType.ALL)
     @JoinTable(
             name = "film_producer",
             joinColumns = @JoinColumn(name = "film_id"),
             inverseJoinColumns = @JoinColumn(name = "producer_id"))
     Set<Producer> producers;
-    @ManyToMany()
-    @JoinTable(
-            name = "film_user",
-            joinColumns = @JoinColumn(name= "film_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    Set<User> users;
+    @ManyToMany(mappedBy = "films",cascade = CascadeType.ALL)
+    private Set<User> users;
 
-    public Set<User> getUsers(){
-        if (users == null) {
-            return new HashSet<>();
-        }
+    public Set<User> getUsers() {
+        if (users == null)
+            return new HashSet<User>();
         return users;
     }
 
-    public void setUsers(Set<User> users){
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 
