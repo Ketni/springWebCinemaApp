@@ -21,10 +21,14 @@ import java.util.List;
 @Controller
 public class AccountController {
 
+    private UserService userService;
+    private FilmService filmService;
+
     @Autowired
-    UserService userService;
-    @Autowired
-    FilmService filmService;
+    AccountController(UserService userService, FilmService filmService){
+        this.userService = userService;
+        this.filmService = filmService;
+    }
 
     @GetMapping("/{user}")
     public String showAccount(Model model, @PathVariable("user") String name){
@@ -49,14 +53,7 @@ public class AccountController {
         User user = userService.findByName(username);
         model.addAttribute("filmList",filmService.sortByNameAcc(user.getFilms(),order));
         model.addAttribute("user",userService.findByName(username));
-        if (order){
-            order = false;
-            model.addAttribute("order",order);
-        }
-        else{
-            order = true;
-            model.addAttribute("order",order);
-        }
+        model.addAttribute("order", MainController.getNewOrder(order));
         return "account";
     }
 
@@ -66,14 +63,7 @@ public class AccountController {
         User user = userService.findByName(username);
         model.addAttribute("filmList",filmService.sortByYear(user.getFilms(),order));
         model.addAttribute("user",user);
-        if (order){
-            order = false;
-            model.addAttribute("order",order);
-        }
-        else{
-            order = true;
-            model.addAttribute("order",order);
-        }
+        model.addAttribute("order", MainController.getNewOrder(order));
         return "account";
     }
 

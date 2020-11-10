@@ -21,10 +21,14 @@ import java.util.Set;
 @Controller
 public class MainController {
 
-    @Autowired
     private FilmService filmService;
-    @Autowired
     private UserService userService;
+
+    @Autowired
+    public MainController(FilmService filmService, UserService userService){
+        this.filmService = filmService;
+        this.userService = userService;
+    }
 
     @GetMapping("/")
     public String homePage(Model model) {
@@ -41,14 +45,7 @@ public class MainController {
                                 @RequestParam("order") boolean order){
         model.addAttribute("filmList",filmService.sortAndSearch(searchString,order));
         model.addAttribute("userList", userService.getAllUsers());
-        if (order){
-            order = false;
-            model.addAttribute("order",order);
-        }
-        else{
-            order = true;
-            model.addAttribute("order",order);
-        }
+        model.addAttribute("order", getNewOrder(order));
         return "index";
     }
 
@@ -58,14 +55,7 @@ public class MainController {
                                 @RequestParam("order") boolean order){
         model.addAttribute("filmList",filmService.sortAndSearchByLength(searchString,order));
         model.addAttribute("userList", userService.getAllUsers());
-        if (order){
-            order = false;
-            model.addAttribute("order",order);
-        }
-        else{
-            order = true;
-            model.addAttribute("order",order);
-        }
+        model.addAttribute("order", getNewOrder(order));
         return "index";
     }
 
@@ -93,6 +83,12 @@ public class MainController {
     public String addFilmFromDetails(@PathVariable("user") String name,@RequestParam("filmId") Long filmId){
         userService.addFilmToUser(filmId,name);
         return "redirect:/filmDetails/"+filmId;
+    }
+
+    static boolean getNewOrder(boolean order){
+        if (order)
+            return false;
+        return true;
     }
 
 

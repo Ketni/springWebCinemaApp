@@ -16,18 +16,24 @@ import org.springframework.web.bind.annotation.*;
 @Controller()
 public class AdminFilmController {
 
+    private FilmService filmService;
+    private CountryService countryService;
+    private GenreService genreService;
+    private ProducerService producerService;
+    private UserService userService;
+    private RoleRepository roleRepository;
+
     @Autowired
-    FilmService filmService;
-    @Autowired
-    CountryService countryService;
-    @Autowired
-    GenreService genreService;
-    @Autowired
-    ProducerService producerService;
-    @Autowired
-    UserService userService;
-    @Autowired
-    RoleRepository roleRepository;
+    public AdminFilmController(FilmService filmService, CountryService countryService,
+                               GenreService genreService, ProducerService producerService,
+                               UserService userService, RoleRepository roleRepository){
+        this.filmService = filmService;
+        this.countryService = countryService;
+        this.genreService = genreService;
+        this.producerService = producerService;
+        this.userService = userService;
+        this.roleRepository = roleRepository;
+    }
 
     @GetMapping("/addFilmForm")
     public String addFilmForm(Model model) {
